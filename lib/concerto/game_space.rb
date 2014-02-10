@@ -24,17 +24,6 @@ module Concerto
       end
     end
 
-    # Creates a physics Player and adds the shape and body to the space.
-    # Returns the shape object
-    def new_player
-      shape = PlayerShape.new
-
-      add_body  shape.body
-      add_shape shape
-
-      shape
-    end
-
   end
 
 end

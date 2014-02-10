@@ -1,6 +1,7 @@
 require_relative 'background'
 require_relative 'game_space'
 require_relative 'player'
+require_relative 'star'
 
 module Concerto
 
@@ -30,11 +31,14 @@ module Concerto
         player.accelerate if [Gosu::KbUp, Gosu::GpButton0].any?  { |k| button_down? k }
 
       end
+
+      stars << Star.new(self, space) if rand(100) < 4 and stars.size < 25
     end
 
     def draw
       background.draw
       player.draw
+      stars.each(&:draw)
     end
 
     def background
@@ -42,7 +46,11 @@ module Concerto
     end
 
     def player
-      @player ||= Player.new self, space.new_player
+      @player ||= Player.new self, space
+    end
+
+    def stars
+      @stars ||= []
     end
   end
 

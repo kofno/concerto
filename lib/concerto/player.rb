@@ -1,6 +1,15 @@
 module Concerto
 
-  Player = Struct.new :window, :shape do
+  class Player
+
+    attr_reader :window
+
+    def initialize window, space
+      @window = window
+
+      space.add_shape shape
+      space.add_body  shape.body
+    end
 
     def draw
       image.draw_rot position.x, position.y, ZOrder::PLAYER, angle.radians_to_gosu
@@ -12,6 +21,10 @@ module Concerto
 
     def image
       @image ||= Gosu::Image.new window, Media['Starfighter.bmp'], false
+    end
+
+    def shape
+      @shape ||= PlayerShape.new
     end
 
     def position
@@ -31,7 +44,7 @@ module Concerto
     end
 
     def reorient
-      self.angle = (3*Math::PI/2.0)
+      self.angle = DEFAULT_ORIENTATION
     end
 
     def accelerate
