@@ -2,6 +2,8 @@ require_relative 'background'
 require_relative 'game_space'
 require_relative 'player'
 require_relative 'star'
+require_relative 'audio'
+require_relative 'ui'
 
 module Concerto
 
@@ -15,7 +17,10 @@ module Concerto
     def initialize
       super SCREEN_HEIGHT, SCREEN_WIDTH, false
       self.caption = "Concerto: A Space Opera in B♭"
+
       @space = GameSpace.new
+      @space.audio = Audio.new(self)
+
 
       player.warp CP::Vec2.new(SCREEN_HEIGHT/2, SCREEN_WIDTH/2)
       player.reorient
@@ -32,13 +37,14 @@ module Concerto
 
       end
 
-      stars << Star.new(self, space) if rand(100) < 4 and stars.size < 25
+      space.add_star(self) if rand(100) < 4 and not space.my_god_its_full_of_stars?
     end
 
     def draw
       background.draw
       player.draw
-      stars.each(&:draw)
+      space.stars.each(&:draw)
+      ui.draw
     end
 
     def background
@@ -51,6 +57,14 @@ module Concerto
 
     def stars
       @stars ||= []
+    end
+
+    def sample name
+      Gosu::Sample.new self, Media[name]
+    end
+
+    def ui
+      @ui ||= UI.new(self, space)
     end
   end
 

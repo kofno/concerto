@@ -7,11 +7,8 @@ module Concerto
 
     attr_reader :window
 
-    def initialize window, space
+    def initialize window
       @window = window
-
-      space.add_shape shape
-      space.add_body  shape.body
 
       random_position
       initial_veocity
